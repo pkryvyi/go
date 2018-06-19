@@ -1,4 +1,4 @@
 runtime: go
 env: flex
-service: pusmessage
+service: default
 #test
