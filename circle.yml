@@ -4,25 +4,14 @@
   #  docker:
       # specify the version
    #   - image: circleci/golang:1.9
-      
-      # Specify service dependencies here if necessary
-      # CircleCI maintains a library of pre-built images
-      # documented at https://circleci.com/docs/2.0/circleci-images/
-      # - image: circleci/postgres:9.4
-
-    #### TEMPLATE_NOTE: go expects specific checkout path representing url
-    #### expecting it in the form of
-    ####   /go/src/github.com/circleci/go-tool
-    ####   /go/src/bitbucket.org/circleci/go-tool
-    #working_directory: /go/src/github.com/pkryvyi/gomachine:
-  
+       
   environment:
     PROJECT_ID: webapp-207620
     CLUSTER_NAME: webapp207620-cluster
     COMPUTE_ZONE: europe-west1-b
     #As specified in Deployment.yml
     DEPLOYMENT_NAME: webapp-dep
-    CONTAINER_NAME: webapp-app
+    CONTAINER_NAME: webappp
 
 deployment:
     production:
