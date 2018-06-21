@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: ~/webapp
     docker:
-      - image: golang:latest
+        - image: golang:latest
       steps:
       - checkout
       - run: 
