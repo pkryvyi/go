@@ -1,43 +1,27 @@
-#version: 2
-#jobs:
- # build:
-  #  docker:
-      # specify the version
-   #   - image: circleci/golang:1.9
-       
-environment:
-    PROJECT_ID: webapp-207620
-    CLUSTER_NAME: webapp207620-cluster
-    COMPUTE_ZONE: europe-west1-b
-    #As specified in Deployment.yml
-    DEPLOYMENT_NAME: webapp-dep
-    CONTAINER_NAME: webappp
-
-deployment:
-    production:
+--- 
+jobs: 
+  build: 
+    dependencies: 
+      - "docker build -t eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1 ."
+      - "sudo /opt/google-cloud-sdk/bin/gcloud docker -- push eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1"
+      - "sudo /opt/google-cloud-sdk/bin/kubectl set image deployment/${DEPLOYMENT_NAME} ${CONTAINER_NAME}=eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1"
+    deployment: 
+      production: 
         branch: master
-        commands:
-        # Save the string to a text file
-        - echo $SERVICE_KEY > key.txt
-        # Decode the Service Account
-        - base64 -i key.txt -d > ${HOME}/gcloud-service-key.json
-        # Authenticate CircleCI with the service account file
-        - sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account ${ACCOUNT_ID} --key-file ${HOME}/gcloud-service-key.json
-        # Set the default project
-        - sudo /opt/google-cloud-sdk/bin/gcloud config set project $PROJECT_ID
-        # Set the default container
-        - sudo /opt/google-cloud-sdk/bin/gcloud --quiet config set container/cluster $CLUSTER_NAME
-        # Set the compute zone
-        - sudo /opt/google-cloud-sdk/bin/gcloud config set compute/zone $COMPUTE_ZONE
-        # Get the cluster credentials.
-        - sudo /opt/google-cloud-sdk/bin/gcloud --quiet container clusters get-credentials $CLUSTER_NAME
-        # Start good old Docker
-        - sudo service docker start
+        commands: 
+          - "echo $SERVICE_KEY > key.txt"
+          - "base64 -i key.txt -d > ${HOME}/gcloud-service-key.json"
+          - "sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account ${ACCOUNT_ID} --key-file ${HOME}/gcloud-service-key.json"
+          - "sudo /opt/google-cloud-sdk/bin/gcloud config set project $PROJECT_ID"
+          - "sudo /opt/google-cloud-sdk/bin/gcloud --quiet config set container/cluster $CLUSTER_NAME"
+          - "sudo /opt/google-cloud-sdk/bin/gcloud config set compute/zone $COMPUTE_ZONE"
+          - "sudo /opt/google-cloud-sdk/bin/gcloud --quiet container clusters get-credentials $CLUSTER_NAME"
+          - "sudo service docker start"
+    environment: 
+      CLUSTER_NAME: webapp207620-cluster
+      COMPUTE_ZONE: europe-west1-b
+      CONTAINER_NAME: webappp
+      DEPLOYMENT_NAME: webapp-dep
+      PROJECT_ID: webapp-207620
+version: 2
 
-dependencies:
-       # Build a Docker image and use the Github commit hash ($CIRCLE_SHA1) as the tag
-       - docker build -t eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1 .
-       # Push the Image to the GCP Container Registry
-       - sudo /opt/google-cloud-sdk/bin/gcloud docker -- push eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1
-        # Update the default image for the deployment
-        - sudo /opt/google-cloud-sdk/bin/kubectl set image deployment/${DEPLOYMENT_NAME} ${CONTAINER_NAME}=eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1
