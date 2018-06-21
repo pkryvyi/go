@@ -5,7 +5,7 @@
       # specify the version
    #   - image: circleci/golang:1.9
        
-  environment:
+environment:
     PROJECT_ID: webapp-207620
     CLUSTER_NAME: webapp207620-cluster
     COMPUTE_ZONE: europe-west1-b
