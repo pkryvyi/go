@@ -44,4 +44,8 @@ jobs:
             - sudo /opt/google-cloud-sdk/bin/gcloud --quiet container clusters get-credentials $CLUSTER_NAME
         # Start good old Docker
             - sudo service docker start
-
+workflows:
+  version: 2
+  build_and_test:
+    jobs:
+      - build
