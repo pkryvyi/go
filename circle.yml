@@ -1,38 +1,30 @@
-#machine:
- # environment:
-    # Add app engine sdk to pythonpath for local unit tests.
-   # PYTHONPATH: ${PYTHONPATH}:${HOME}/google_appengine
+machine:
+  environment:
+    PROJECT_ID: webapp-207620
+    CLUSTER_NAME: webapp207620-cluster
+    COMPUTE_ZONE: europe-west1-b
+    #As specified in Deployment.yml
+    DEPLOYMENT_NAME: webapp-dep
+    CONTAINER_NAME: webapp-app
 
-    # Replace this with your project ID
-  #  GCLOUD_PROJECT: "WebApp"
+deployment:
+    production:
+        branch: master
+        commands:
+        # Save the string to a text file
+        - echo $SERVICE_KEY > key.txt
+        # Decode the Service Account
+        - base64 -i key.txt -d > ${HOME}/gcloud-service-key.json
+        # Authenticate CircleCI with the service account file
+        - sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account ${ACCOUNT_ID} --key-file ${HOME}/gcloud-service-key.json
+        # Set the default project
+        - sudo /opt/google-cloud-sdk/bin/gcloud config set project $PROJECT_ID
+        # Set the default container
+        - sudo /opt/google-cloud-sdk/bin/gcloud --quiet config set container/cluster $CLUSTER_NAME
+        # Set the compute zone
+        - sudo /opt/google-cloud-sdk/bin/gcloud config set compute/zone $COMPUTE_ZONE
+        # Get the cluster credentials.
+        - sudo /opt/google-cloud-sdk/bin/gcloud --quiet container clusters get-credentials $CLUSTER_NAME
+        # Start good old Docker
+        - sudo service docker start
 
-#dependencies:
- # pre:
-    # Download App Engine SDK
-    # This is not necessary to deploy, its only necessary  to run local tests importing the App Engine SDK
-  #  - curl -o $HOME/google_appengine_1.9.30.zip https://storage.googleapis.com/appengine-sdks/featured/google_appengine_1.9.30.zip
-   # - unzip -q -d $HOME $HOME/google_appengine_1.9.30.zip
-    # Retrieve our secrets from the CircleCI environment
-   # - echo $CLIENT_SECRET | base64 --decode > ${HOME}/client-secret.json
-   # - sed  s/YOUR-API-KEY/$API_KEY/ api_key.py.sample > api_key.py
-    # vendor our dependencies
-   # - mkdir -p lib
-   # - pip install -r requirements.txt -t lib
-    # Make sure gcloud is up to date
-   # - gcloud --quiet components update app
-    # authenticate gcloud
-   # - gcloud auth activate-service-account --key-file ${HOME}/client-secret.json
-    # Replace <your-project-id>
-   # - gcloud config set project $GCLOUD_PROJECT
-
-#test:
-#  override:
-    # run local unit tests
-#    - python test_main.py
-
-#deployment:
- #   staging:
-  #      branch: master
-   #     commands:
-        # deploy to AppEngine
-    #    - gcloud -q preview app deploy app.yaml --promote --version=1
