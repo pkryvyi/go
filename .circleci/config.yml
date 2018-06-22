@@ -1,16 +1,16 @@
 version: 2
 jobs:
     build:
-        working_directory: ~/go
-        environment:
-            PROJECT_ID: webapp-207620
-            CLUSTER_NAME: webapp207620-cluster
-            COMPUTE_ZONE: europe-west1-b
+        working_directory: /go/src/github.com/pkryvyi/go
+        #environment:
+         #   PROJECT_ID: webapp-207620
+          #  CLUSTER_NAME: webapp207620-cluster
+           # COMPUTE_ZONE: europe-west1-b
     #As specified in Deployment.yml
-            DEPLOYMENT_NAME: webapp-dep
-            CONTAINER_NAME: webappp
+           # DEPLOYMENT_NAME: webapp-dep
+           # CONTAINER_NAME: webappp
         docker:
-            - image: circleci/golang
+            - image: circleci/golang:1.9
         steps:
             #- setup_remote_docker
             - checkout
