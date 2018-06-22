@@ -24,9 +24,10 @@ jobs:
                 #gcloud auth configure-docker  
             - run:
                 name: Push the Image to the GCP Container Registry
-                command: sudo /opt/google-cloud-sdk/bin/gcloud docker -- push eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1
+                command: /opt/google-cloud-sdk/bin/gcloud docker -- push eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1
                 #command: docker push eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1
-           # - run: 
+           # - run:
+           #  
            #     name: Update the default image for the deployment
            #     command: sudo /opt/google-cloud-sdk/bin/kubectl set image deployment/${DEPLOYMENT_NAME} ${CONTAINER_NAME}=eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1
 
