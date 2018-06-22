@@ -1,7 +1,7 @@
 version: 2
 jobs:
     build:
-        working_directory: ~/webapp
+        working_directory: ~/go
         environment:
             PROJECT_ID: webapp-207620
             CLUSTER_NAME: webapp207620-cluster
@@ -12,12 +12,12 @@ jobs:
         docker:
             - image: golang:latest
         steps:
-            - setup_remote_docker
+            #- setup_remote_docker
             - checkout
             - run: 
                 name: Build a Docker image and use the Github commit hash ($CIRCLE_SHA1) as the tag
                 #command: docker build -t eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1 .
-                command: sudo docker build -t eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1 .
+                command: docker build -t eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1 .
             - run:
                 name: Push the Image to the GCP Container Registry
                 command: sudo /opt/google-cloud-sdk/bin/gcloud docker -- push eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1
