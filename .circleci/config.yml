@@ -19,12 +19,12 @@ jobs:
                 name: Build a Docker image and use the Github commit hash ($CIRCLE_SHA1) as the tag
                 #command: docker build -t eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1 .
                 command: docker build -t eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1 .
-            - run:
-                name: Push the Image to the GCP Container Registry
-                command: sudo /opt/google-cloud-sdk/bin/gcloud docker -- push eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1
-            - run: 
-                name: Update the default image for the deployment
-                command: sudo /opt/google-cloud-sdk/bin/kubectl set image deployment/${DEPLOYMENT_NAME} ${CONTAINER_NAME}=eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1
+           # - run:
+           #     name: Push the Image to the GCP Container Registry
+           #     command: sudo /opt/google-cloud-sdk/bin/gcloud docker -- push eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1
+           # - run: 
+           #     name: Update the default image for the deployment
+           #     command: sudo /opt/google-cloud-sdk/bin/kubectl set image deployment/${DEPLOYMENT_NAME} ${CONTAINER_NAME}=eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1
 
 workflows:
   version: 2
