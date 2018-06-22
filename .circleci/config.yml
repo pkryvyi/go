@@ -27,12 +27,12 @@ jobs:
         # Authenticate CircleCI with the service account file
             - run: gcloud auth activate-service-account ${ACCOUNT_ID} --key-file ${HOME}/gcloud-service-key.json 
                 #gcloud config set account ${ACCOUNT_ID} 
-                #gcloud auth configure-docker
+            - run: gcloud auth configure-docker
 
             - run:
                 name: Push the Image to the GCP Container Registry
                 #command: /opt/google-cloud-sdk/bin/gcloud docker -- push eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1
-                command: gcloud docker -- push eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1
+                command: docker push eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1
            # - run:
            #  
            #     name: Update the default image for the deployment
