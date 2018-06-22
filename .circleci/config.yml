@@ -14,7 +14,7 @@ jobs:
         steps:
             #- setup_remote_docker
             - checkout
-            - run: sudo service docker start
+            #- run: sudo service docker start
             - run: 
                 name: Build a Docker image and use the Github commit hash ($CIRCLE_SHA1) as the tag
                 command: docker build -t webapppp .
