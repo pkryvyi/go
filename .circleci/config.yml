@@ -13,6 +13,10 @@ jobs:
             #- image: circleci/golang:1.9
             - image: google/cloud-sdk
         steps:
+            - run:
+                name: Store Service Account
+                command: echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
+
             - setup_remote_docker
             - checkout
             #- run: sudo service docker start
