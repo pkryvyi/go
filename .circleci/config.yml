@@ -21,14 +21,14 @@ jobs:
                 #command: docker build -t webapppp .
                 command: docker build -t eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1 .
 
-            - run: - echo $SERVICE_KEY > key.txt
+            - run: echo $SERVICE_KEY > key.txt
         # Decode the Service Account
             - run: base64 -i key.txt -d > ${HOME}/gcloud-service-key.json
         # Authenticate CircleCI with the service account file
             - run: sudo /opt/google-cloud-sdk/bin/gcloud auth activate-service-account ${ACCOUNT_ID} --key-file ${HOME}/gcloud-service-key.json 
                 #gcloud config set account ${ACCOUNT_ID} 
                 #gcloud auth configure-docker
-                  
+
             - run:
                 name: Push the Image to the GCP Container Registry
                 #command: /opt/google-cloud-sdk/bin/gcloud docker -- push eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1
