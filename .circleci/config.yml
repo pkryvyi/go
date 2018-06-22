@@ -10,7 +10,7 @@ jobs:
             DEPLOYMENT_NAME: webapp-dep
             CONTAINER_NAME: webappp
         docker:
-            - image: golang:latest
+            - image: circleci/golang
         steps:
             #- setup_remote_docker
             - checkout
