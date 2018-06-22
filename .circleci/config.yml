@@ -13,10 +13,10 @@ jobs:
             - image: golang:latest
         steps:
             - checkout
-            - run: 
-                name: Build a Docker image and use the Github commit hash ($CIRCLE_SHA1) as the tag
+            - run: docker build -t eu.gcr.io/${PROJECT_ID}/node-app:v1 .
+                #name: Build a Docker image and use the Github commit hash ($CIRCLE_SHA1) as the tag
                 #command: docker build -t eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1 .
-                command: docker build -t eu.gcr.io/${PROJECT_ID}/node-app:v1 .
+                #command: docker build -t eu.gcr.io/${PROJECT_ID}/node-app:v1 .
             - run:
                 name: Push the Image to the GCP Container Registry
                 command: sudo /opt/google-cloud-sdk/bin/gcloud docker -- push eu.gcr.io/${PROJECT_ID}/node-app:v1
