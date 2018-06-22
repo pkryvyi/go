@@ -12,7 +12,7 @@ jobs:
         docker:
             - image: circleci/golang:1.9
         steps:
-            #- setup_remote_docker
+            - setup_remote_docker
             - checkout
             #- run: sudo service docker start
             - run: 
