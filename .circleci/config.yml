@@ -3,7 +3,7 @@ jobs:
     build:
         working_directory: /go/src/github.com/pkryvyi/go
         environment:
-            PROJECT_ID: webapp-207620
+            #PROJECT_ID: webapp-207620
             CLUSTER_NAME: webapp207620-cluster
             COMPUTE_ZONE: europe-west1-b
     #As specified in Deployment.yml
@@ -21,6 +21,7 @@ jobs:
             - setup_remote_docker
             - checkout
             #- run: sudo service docker start
+            - run: export PROJECT_ID="$(gcloud config get-value project -q)"
             - run: 
                 name: Build a Docker image and use the Github commit hash ($CIRCLE_SHA1) as the tag
                 #command: docker build -t webapppp .
@@ -40,6 +41,7 @@ jobs:
                 name: Push the Image to the GCP Container Registry
                 #command: /opt/google-cloud-sdk/bin/gcloud docker -- push eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1
                 command: docker push eu.gcr.io/${PROJECT_ID}/${DEPLOYMENT_NAME}:$CIRCLE_SHA1
+            
             - run: gcloud config set project ${PROJECT_ID}
             - run: gcloud container clusters create ${CLUSTER_NAME} --num-nodes=${NODES} --region=${COMPUTE_ZONE}
             - run: kubectl run ${DEPLOYMENT_NAME} --image=eu.gcr.io/${PROJECT_ID}/${DEPLOYMENT_NAME}:$CIRCLE_SHA1 --port 8080
