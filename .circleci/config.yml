@@ -42,9 +42,9 @@ jobs:
                 #command: /opt/google-cloud-sdk/bin/gcloud docker -- push eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1
                 command: docker push eu.gcr.io/${PROJECT_ID}/${DEPLOYMENT_NAME}:$CIRCLE_SHA1
             - run: export PROJECT_ID="$(gcloud config get-value project -q)"
-            - run: gcloud config set project ${PROJECT_ID}
-            - run: gcloud container clusters create ${CLUSTER_NAME} --num-nodes=${NODES} --region=${COMPUTE_ZONE}
-            - run: kubectl run ${DEPLOYMENT_NAME} --image=eu.gcr.io/${PROJECT_ID}/${DEPLOYMENT_NAME}:$CIRCLE_SHA1 --port 8080
+            #- run: gcloud config set project ${PROJECT_ID}
+            #- run: gcloud container clusters create ${CLUSTER_NAME} --num-nodes=${NODES} --region=${COMPUTE_ZONE}
+            #- run: kubectl run ${DEPLOYMENT_NAME} --image=eu.gcr.io/${PROJECT_ID}/${DEPLOYMENT_NAME}:$CIRCLE_SHA1 --port 8080
            #  
            #     name: Update the default image for the deployment
            #     command: sudo /opt/google-cloud-sdk/bin/kubectl set image deployment/${DEPLOYMENT_NAME} ${CONTAINER_NAME}=eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1
