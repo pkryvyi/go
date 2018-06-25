@@ -7,8 +7,8 @@ jobs:
             CLUSTER_NAME: webapp207620-cluster
             COMPUTE_ZONE: europe-west1-b
     #As specified in Deployment.yml
-            DEPLOYMENT_NAME: webapp
-            CONTAINER_NAME: webappp
+            DEPLOYMENT_NAME: webapp1
+            CONTAINER_NAME: webappp1
             NODES: 1
         docker:
             #- image: circleci/golang:1.9
