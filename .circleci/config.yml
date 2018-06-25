@@ -44,6 +44,7 @@ jobs:
             - run: export PROJECT_ID="$(gcloud config get-value project -q)"
             - run: gcloud config set project ${PROJECT_ID}
             - run: gcloud config set compute/zone ${COMPUTE_ZONE}
+            - run: gcloud projects set-iam-policy ${PROJECT_ID} gcloud-service-key.json
             - run: gcloud container clusters create ${CLUSTER_NAME} --num-nodes=${NODES} #--region=${COMPUTE_ZONE}
             - run: ku1bectl run ${DEPLOYMENT_NAME} --image=eu.gcr.io/${PROJECT_ID}/${DEPLOYMENT_NAME}:$CIRCLE_SHA1 --port 8080
             - run: kubectl expose deployment ${DEPLOYMENT_NAME} --type=LoadBalancer --port 8080 --target-port
