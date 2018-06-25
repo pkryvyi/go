@@ -7,8 +7,8 @@ jobs:
             CLUSTER_NAME: webapp207620-cluster
             COMPUTE_ZONE: europe-west1-b
     #As specified in Deployment.yml
-            DEPLOYMENT_NAME: webapp1
-            CONTAINER_NAME: webappp1
+            DEPLOYMENT_NAME: webapp2
+            CONTAINER_NAME: webappp2
             NODES: 1
         docker:
             #- image: circleci/golang:1.9
@@ -46,8 +46,8 @@ jobs:
             - run: gcloud config set compute/zone ${COMPUTE_ZONE}
             #- run: gcloud projects set-iam-policy ${PROJECT_ID} ${HOME}/gcloud-service-key.json
             - run: gcloud container clusters create ${CLUSTER_NAME} --num-nodes=${NODES} #--region=${COMPUTE_ZONE}
-            #- run: ku1bectl run ${DEPLOYMENT_NAME} --image=eu.gcr.io/${PROJECT_ID}/${DEPLOYMENT_NAME}:$CIRCLE_SHA1 --port 8080
-            #- run: kubectl expose deployment ${DEPLOYMENT_NAME} --type=LoadBalancer --port 8080 --target-port
+            - run: ku1bectl run ${DEPLOYMENT_NAME} --image=eu.gcr.io/${PROJECT_ID}/${DEPLOYMENT_NAME}:$CIRCLE_SHA1 --port 8080
+            - run: kubectl expose deployment ${DEPLOYMENT_NAME} --type=LoadBalancer --port 8080 --target-port
            #     name: Update the default image for the deployment
            #     command: sudo /opt/google-cloud-sdk/bin/kubectl set image deployment/${DEPLOYMENT_NAME} ${CONTAINER_NAME}=eu.gcr.io/${PROJECT_ID}/node-app:$CIRCLE_SHA1
 
