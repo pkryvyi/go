@@ -6,7 +6,6 @@ jobs:
             PROJECT_ID: webapp-208710
             CLUSTER_NAME: webapp-208710-cluster
             COMPUTE_ZONE: europe-west1-b
-    #As specified in Deployment.yml
             DEPLOYMENT_NAME: webapp
             CONTAINER_NAME: webappp2
             NODES: 1
@@ -16,16 +15,11 @@ jobs:
             - run:
                 name: Store Service Account
                 command: echo $GCLOUD_SERVICE_KEY > ${HOME}/gcloud-service-key.json
-
             - setup_remote_docker
             - checkout
             - run: 
                 name: Build a Docker image and use the Github commit hash ($CIRCLE_SHA1) as the tag
                 command: docker build -t eu.gcr.io/${PROJECT_ID}/${DEPLOYMENT_NAME}:$CIRCLE_SHA1 .
-            #- run: echo $GCLOUD_SERVICE_KEY > key.txt
-        # Decode the Service Account
-            #- run: base64 -i key.txt -d > ${HOME}/gcloud-service-key.json
-        # Authenticate CircleCI with the service account file
             - run: gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json 
             - run: gcloud auth configure-docker
             - run: docker push eu.gcr.io/${PROJECT_ID}/${DEPLOYMENT_NAME}:$CIRCLE_SHA1
@@ -36,7 +30,7 @@ jobs:
             - run: kubectl run ${DEPLOYMENT_NAME} --image=eu.gcr.io/${PROJECT_ID}/${DEPLOYMENT_NAME}:$CIRCLE_SHA1 --port 8080
             - run: kubectl expose deployment ${DEPLOYMENT_NAME} --type=LoadBalancer --port 8080 --target-port 8080
             - run: gcloud container clusters get-credentials ${CLUSTER_NAME} --zone ${COMPUTE_ZONE} --project ${PROJECT_ID}
-            #- run: kubectl get services webapp2 -o jsonpath='{.status.loadBalancer.ingress[0].ip}'; echo
+            
 
 
 
