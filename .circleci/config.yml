@@ -7,7 +7,7 @@ jobs:
             CLUSTER_NAME: webapp-208710-cluster
             COMPUTE_ZONE: europe-west1-b
     #As specified in Deployment.yml
-            DEPLOYMENT_NAME: webapp2
+            DEPLOYMENT_NAME: webapp
             CONTAINER_NAME: webappp2
             NODES: 1
         docker:
