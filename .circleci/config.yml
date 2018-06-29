@@ -20,17 +20,11 @@ jobs:
             - run: 
                 name: Build a Docker image and use the Github commit hash ($CIRCLE_SHA1) as the tag
                 command: docker build -t eu.gcr.io/${PROJECT_ID}/${DEPLOYMENT_NAME}:$CIRCLE_SHA1 .
-            - run:
-                name: authorize access to Google Cloud Platform with a service account 
-                command:gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json 
-            - run:
-                name: adds the Docker credHelper entry to Docker's configuration file, or creates the file if it doesn't exist. This will register gcloud as the credential helper for all Google-supported Docker registries
-                command: gcloud auth configure-docker
+            - run: gcloud auth activate-service-account --key-file=${HOME}/gcloud-service-key.json 
+            - run: gcloud auth configure-docker
             - run: docker push eu.gcr.io/${PROJECT_ID}/${DEPLOYMENT_NAME}:$CIRCLE_SHA1
             - run: export PROJECT_ID="$(gcloud config get-value project -q)"
-            - run: 
-                name: set a Cloud SDK property
-                command:gcloud config set project ${PROJECT_ID}
+            - run: gcloud config set project ${PROJECT_ID}
             - run: gcloud config set compute/zone ${COMPUTE_ZONE}
             - run: gcloud container clusters create ${CLUSTER_NAME} --num-nodes=${NODES} 
             - run: kubectl run ${DEPLOYMENT_NAME} --image=eu.gcr.io/${PROJECT_ID}/${DEPLOYMENT_NAME}:$CIRCLE_SHA1 --port 8080
